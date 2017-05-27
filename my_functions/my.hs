@@ -37,3 +37,11 @@ select :: [Int] -> [a] -> [a]
 select _ [] = []
 select [] _ = []
 select (n:ns) xs = [x | (x, m) <- zip xs [0..], m == n] ++ select ns xs
+
+--Implement a function that takes a list of numbers and returns a list
+--of numbers obtained by summing two adjacent elements.
+--E.g.: [1,2,3,4] -> [3, 5, 7]
+sumCouples :: Num a => [a] -> [a]
+sumCouples [] = []
+sumCouples [x] = []
+sumCouples (x:(y:ys)) = (x+y):sumCouples(y:ys)
