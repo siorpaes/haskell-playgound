@@ -2,7 +2,9 @@
 import Data.List
 
 readLines :: FilePath -> IO [String]
-readLines = fmap lines . readFile
+--readLines = fmap lines . readFile
+--equivalent without point-free notation
+readLines file = fmap lines (readFile file)
 
 makeInteger :: [String] -> [Int]
 makeInteger = map read
@@ -16,3 +18,7 @@ main = do
   print (sort (makeInteger content))
   print (sort (makeDouble content))
 
+  --Equivalent without using fmap
+  allFile <- readFile "111.txt"
+  let myLines = lines allFile
+  print (sort myLines)
