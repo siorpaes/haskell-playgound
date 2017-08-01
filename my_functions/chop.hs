@@ -1,25 +1,34 @@
--- Chops a list taking the first four elements and discarding the next four
--- elements sequentially
-chop :: [a] -> [a]
-chop (x:y:z:w:_:_:_:_:xs) = x:y:z:w:chop xs
-chop xs = take 4 xs
+-- Implements chop48 function that chops a list taking the first four elements
+-- and discarding the next four elements of the list sequentially, i.e.:
+-- chop48 [1..20] = [1,2,3,4,9,10,11,12,17,18,19,20]
 
+-- For 'chunksOf'
+import Data.List.Split.Internals
 
---Alternative implementation
+--Pattern matching implementation. Not easy to make it general
+chop48 :: [a] -> [a]
+chop48 (x:y:z:w:_:_:_:_:xs) = x:y:z:w:chop48 xs
+chop48 xs = take 4 xs
 
--- Needs this function that takes a list and generates a list of lists
--- of given length out of it. Taken from https://stackoverflow.com/questions/12876384/grouping-a-list-into-lists-of-n-elements-in-haskell
+-- Function that takes a list and generates a list of lists of given length out of it.
+-- Same as 'chunksOf'
+-- Taken from https://stackoverflow.com/questions/12876384/grouping-a-list-into-lists-of-n-elements-in-haskell
 group :: Int -> [a] -> [[a]]
 group _ [] = []
 group n l
   | n > 0 = (take n l) : (group n (drop n l))
   | otherwise = error "Negative n"
 
--- Makes a list of lists of length 8. Takes only first 4 elements of every
+
+
+-- Alternative implementation. Needs 'ChunkOf' in package Data.List.Split.Internals
+-- or 'group' defined above. Generic as m and n are function parameters
+
+-- Makes a list of lists of length n. Takes only first m elements of every
 -- sub-list and finally concatenates the result together
-chop' :: [a] -> [a]
-chop' xs = concat (map (take 4) (group 8 xs))
+chopmn :: Int -> Int -> [a] -> [a]
+chopmn m n xs = concat (map (take m) (chunksOf n xs))
 
 -- Using point-free style
-chop'' :: [a] -> [a]
-chop'' = concat . map (take 4) . group 8
+chopmn' :: Int -> Int -> [a] -> [a]
+chopmn' m n = concat . map (take m) . chunksOf n
