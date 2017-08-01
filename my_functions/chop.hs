@@ -13,7 +13,7 @@ chop48 xs = take 4 xs
 -- More general implementation: takes m out of n elements
 chopmn :: Int -> Int -> [a] -> [a]
 chopmn _ _ [] = []
-chopmn m n xs = take m (take n xs) ++ chopmn m n (drop n xs)
+chopmn m n xs = take m xs ++ chopmn m n (drop n xs)
 
 
 -- Function that takes a list and generates a list of lists of given length out of it.
