@@ -5,10 +5,16 @@
 -- For 'chunksOf'
 import Data.List.Split.Internals
 
---Pattern matching implementation. Not easy to make it general
+-- Pattern matching implementation. Not easy to make it general
 chop48 :: [a] -> [a]
 chop48 (x:y:z:w:_:_:_:_:xs) = x:y:z:w:chop48 xs
 chop48 xs = take 4 xs
+
+-- More general implementation: takes m out of n elements
+chopmn :: Int -> Int -> [a] -> [a]
+chopmn _ _ [] = []
+chopmn m n xs = take m (take n xs) ++ chopmn m n (drop n xs)
+
 
 -- Function that takes a list and generates a list of lists of given length out of it.
 -- Same as 'chunksOf'
@@ -19,16 +25,14 @@ group n l
   | n > 0 = (take n l) : (group n (drop n l))
   | otherwise = error "Negative n"
 
-
-
 -- Alternative implementation. Needs 'ChunkOf' in package Data.List.Split.Internals
--- or 'group' defined above. Generic as m and n are function parameters
+-- or 'group' defined above.
 
 -- Makes a list of lists of length n. Takes only first m elements of every
 -- sub-list and finally concatenates the result together
-chopmn :: Int -> Int -> [a] -> [a]
-chopmn m n xs = concat (map (take m) (chunksOf n xs))
+chopmn' :: Int -> Int -> [a] -> [a]
+chopmn' m n xs = concat (map (take m) (chunksOf n xs))
 
 -- Using point-free style
-chopmn' :: Int -> Int -> [a] -> [a]
-chopmn' m n = concat . map (take m) . chunksOf n
+chopmn'' :: Int -> Int -> [a] -> [a]
+chopmn'' m n = concat . map (take m) . chunksOf n
