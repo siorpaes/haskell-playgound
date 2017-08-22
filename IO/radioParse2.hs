@@ -4,8 +4,12 @@
 -- IO with data manipulation.
 -- Reads  _all_ data from the file in a buffer and then such buffer is
 -- processed. Haskell laziness guarantees that in fact the data is not really
--- loaded in memory.
+-- loaded in memory but processed at runtime
 
+
+-- Converts a list of strings to a list of integers
+makeInteger :: [String] -> [Int]
+makeInteger = map read
 
 -- Converts a value to its 16 bit signed representation
 toSigned16 :: Int -> Int
@@ -25,9 +29,10 @@ from8to16 :: [Int] -> [Int]
 from8to16 [] = []
 from8to16 (x:y:ys) = (x*256 + y):from8to16 ys
 
+-- Remove I/Q, convert to Int, converto from 8 to 16 bit, convert to S16
+processData :: [String] -> [Int]
+processData = map toSigned16 . from8to16 . makeInteger . chopmn 4 8
+
 main = do
      content <- readLines "data.txt"            --Read all data
-     let iqStrings = chopmn 4 8 content         --Remove I/Q
-     let iq8 = map read iqStrings :: [Int]      --Convert to Int
-     let iq16 = map toSigned16 (from8to16 iq8)  --Convert to 16 bit
-     mapM_ putStrLn $ map show $ iq16           --Print data
+     mapM_ print $ processData content          --Print data. 'print' automatically converts from Int to String
