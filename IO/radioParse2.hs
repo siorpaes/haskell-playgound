@@ -6,6 +6,7 @@
 -- processed. Haskell laziness guarantees that in fact the data is not really
 -- loaded in memory but processed at runtime
 
+import System.Environment
 
 -- Reads the whole file and stores lines in a list of Strings
 readLines :: FilePath -> IO [String]
@@ -23,16 +24,17 @@ makeInteger = map read
 -- Converts 8 bit value pairs to 16 bit values
 from8to16 :: [Int] -> [Int]
 from8to16 [] = []
-from8to16 (x:y:ys) = (x*256 + y):from8to16 ys
+from8to16 (x:y:ys) = (x + 256 * y):from8to16 ys
 
 -- Converts a value to its 16 bit signed representation
 toSigned16 :: Int -> Int
 toSigned16 x = if x <= 0x7fff then x else (x - 0xffff - 1)
 
--- Remove I/Q, convert to Int, converto from 8 to 16 bit, convert to S16
+-- Remove I/Q, convert to Int, convert from 8 to 16 bit, convert to S16
 processData :: [String] -> [Int]
 processData = map toSigned16 . from8to16 . makeInteger . chopmn 4 8
 
 main = do
-     content <- readLines "data.txt"            --Read all data
+     args <- getArgs
+     content <- readLines $ head args           --Read all data
      mapM_ print $ processData content          --Process data ad print it
