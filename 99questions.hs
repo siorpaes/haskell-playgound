@@ -42,5 +42,11 @@ isPalindrome xs = xs == myReverse xs
 
 --Problem 8
 compress :: Eq a => [a] -> [a]
-compress [x] = [x]
-compress xs = init (foldr (\x ys -> if x /= head ys then x:ys else ys) [head xs] xs)
+compress xs = foldr f [] xs
+              where f x ys | ys == []     = [x]
+                           | x /= head ys = x:ys
+                           | otherwise    = ys
+
+compress' :: Eq a => [a] -> [a]
+compress' [x] = [x]
+compress' xs = init $ foldr (\x ys -> if x /= head ys then x:ys else ys) [head xs] xs
