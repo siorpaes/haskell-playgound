@@ -50,3 +50,10 @@ compress xs = foldr f [] xs
 compress' :: Eq a => [a] -> [a]
 compress' [x] = [x]
 compress' xs = init $ foldr (\x ys -> if x /= head ys then x:ys else ys) [head xs] xs
+
+--Problem 9
+pack :: Eq a => [a] -> [[a]]
+pack xs = foldr f [[]] xs
+          where f x ys | ys == [[]]          = [[x]]
+                       | x == head (head ys) = (x:head ys) : tail ys
+                       | otherwise           = [x]:ys
