@@ -57,3 +57,9 @@ pack xs = foldr f [[]] xs
           where f x ys | ys == [[]]          = [[x]]
                        | x == head (head ys) = (x:head ys) : tail ys
                        | otherwise           = [x]:ys
+
+--Problem 10
+encode :: Eq a => [a] -> [(Int, a)]
+encode [] = []
+encode xs = zip (map length ys) (map head ys)
+                where ys = pack xs
