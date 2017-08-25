@@ -63,3 +63,19 @@ encode :: Eq a => [a] -> [(Int, a)]
 encode [] = []
 encode xs = zip (map length ys) (map head ys)
                 where ys = pack xs
+
+--Problem 14
+dupli :: [a] -> [a]
+dupli [] = []
+dupli (x:xs) = x:x:dupli xs
+
+--Problem 15
+repli :: [a] -> Int -> [a]
+repli [] _ = []
+repli (x:xs) n = (take n $ repeat x) ++ repli xs n
+
+--Problem 16
+dropEvery :: [a] -> Int -> [a]
+dropEvery [] _ = []
+dropEvery _ 0 = []
+dropEvery xs n = (take (n-1) xs) ++ dropEvery (drop n xs) n
