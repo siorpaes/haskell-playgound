@@ -79,3 +79,23 @@ dropEvery :: [a] -> Int -> [a]
 dropEvery [] _ = []
 dropEvery _ 0 = []
 dropEvery xs n = (take (n-1) xs) ++ dropEvery (drop n xs) n
+
+--Problem 17
+split :: [a] -> Int -> ([a], [a])
+split xs n = (take n xs, drop n xs)
+
+--Problem 18
+slice :: [a] -> Int -> Int -> [a]
+slice xs m n = drop (m-1) (take n xs)
+
+--Problem 19
+rotate :: [a] -> Int -> [a]
+rotate xs n | n >= 0      =  drop n xs ++ take n xs
+            | otherwise   =  drop (length xs + n) xs ++ take (length xs + n) xs
+
+--Problem 20
+removeAt :: Int -> [a] -> (a, [a])
+removeAt n xs | n < 1           = error "Invalid index"
+              | n > length xs   = error "Invalid index"
+              | length xs == 0  = error "Empty list"
+              | otherwise       = (xs !! (n-1), (take (n-1) xs) ++ drop n xs)
